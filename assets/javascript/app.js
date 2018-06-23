@@ -124,7 +124,7 @@ var incorrect = 0;
     // Create display for timer
         var timerDiv = $("#timer");
     // Set time limit
-        var time = 20;
+        var time = 40;
     // Decrease by 1 every 1 second
         interval = setInterval(function() {
         // Decrease 1 from time every 1000 milliseconds (1 second).

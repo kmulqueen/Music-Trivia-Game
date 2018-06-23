@@ -156,7 +156,7 @@ var incorrect = 0;
 
     // Start Game
     function startGame() {
-        $("#timer").text("20");
+        $("#timer").text("40");
         timer();
         for(var i = 0; i < questionArray.length; i++) {
 

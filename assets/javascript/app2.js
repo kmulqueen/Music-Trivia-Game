@@ -67,8 +67,34 @@ $("document").ready(function () {
         }
         
     ];
+// Array to store the user's answer
+var choiceBank=[];
+// Set up counters for correct and incorrect
+var correct = 0;
+var incorrect = 0;
+     
+ // Set up submit button
+ var submit = $("<button>").addClass("submit-button btn btn-primary btn-lg").text('Finish');
+ submit.on("click", function() {
+     // Checks if clicked
+     $(this).data("clicked", true);
+     // Score to be shown and Check if answer is correct
+     for(var i = 0; i < questionArray.length; i++){
+         if(questionArray[i].answer === choiceBank[i.toString()]) {
+             correct++;
+         } else {
+             incorrect++;
+         };
+     };
+     $("#answers").text("Trivia game completed! \nCorrect: " + correct + "\nIncorrect: " + incorrect);
+     $("#finish").empty();
+     $("#timer").empty();
+     clearInterval(timer);
+     $("#timer").text("You Finished!")
+     console.log("You Finished! Game Over");
+ });
 
-    var choiceBank=[];
+//  $('#finish').append(submit);
 
 
     // Functions ==========================================================
@@ -77,36 +103,58 @@ $("document").ready(function () {
     function startBtn() {
         $("#timer").empty();
         $("#answers").empty();
+        $("#finish").empty();
         var startButton = $("<button>");
         startButton.addClass("start-button btn btn-primary btn-lg").text("Start");
         $("#answers").append(startButton);
         $(startButton).on("click", function() {
             $("#answers").empty();
+            // $("#finish").append(submit);
             startGame();
         });
 
     };
 
     // Timer
-    function timeUp() {
-        var timerDiv = $("#timer");
-     
-        setInterval(function() {
-            var timer = 60;
-            timer--;
-            console.log(timer);
-            timerDiv.text("Time: " + timer);
-        }, 1000);
-
-        if(timer = 0) {
-             $("#answers").text("Time's Up! \nCorrect: " + correct + "\nIncorrect: " + incorrect);
+    
+    // Function
+    function timer() {
+    // Create display for timer
+    var timerDiv = $("#timer");
+    // Set time limit
+    var time = 20;
+    // Decrease by 1 every 1 second
+    var myVar = setInterval(function() {
+        // Decrease 1 from time every 1000 milliseconds (1 second).
+        time--;
+        // If time reaches 0, display results of quiz
+        // create variable to store display
+        var display = $("#answers");
+        if(time === 0) {
+            clearInterval(myVar);
+            timerDiv.text("Ran Out of Time! Game Over");
+            console.log("0! Ran out of time.");
+            display.text("Ran Out of Time! Score: \nCorrect: " + correct + "\nIncorrect: " + incorrect);
+        } else if($(".submit-button").data("clicked") === true){
+            clearInterval(myVar);
+            timerDiv.text("You Finished In Time!");
+            display.text("Trivia game completed! \nCorrect: " + correct + "\nIncorrect: " + incorrect);
+            console.log("You Finished In Time!");
+        } 
+        else {
+            timerDiv.text(time);
         };
-
+                           
+        
+        console.log("set interval working");
+    }, 1000);
+     
     };
 
     // Start Game
     function startGame() {
-        timeUp();
+        $("#timer").text("20");
+        timer();
         for(var i = 0; i < questionArray.length; i++) {
 
             var newQuestion = questionArray[i];
@@ -150,101 +198,36 @@ $("document").ready(function () {
                 // This code ensures that if the user changes their answer that their answer won't count as 2 guesses, but as whatever their most recent guess was.
                 choiceBank[$(this).attr('data-question')] =  $(this).attr("data-option");
             });
-            
-    
-        // Set up counters for correct and incorrect
-            var correct = 0;
-            var incorrect = 0;
-            
-        // Set up submit button
-        var submit = $("<button>").addClass("submit-button btn btn-primary btn-lg").text('Finish');
-    
-        submit.on("click", function() {
-
-            // Score to be shown and Check if answer is correct
-            for(var i = 0; i < questionArray.length; i++){
-                if(questionArray[i].answer === choiceBank[i.toString()]) {
-                    correct++;
-                } else {
-                    incorrect++;
-                };
-            };
-            $("#answers").text("Trivia game completed! \nCorrect: " + correct + "\nIncorrect: " + incorrect);
-            $("#finish").empty();
-            $("#timer").empty();
-        });
-    
-        $('#finish').append(submit);
-    };
-
-
-
-
-    // Generate the questions order
-    //  for(var i = 0; i < questionArray.length; i++) {
-
-    //     var newQuestion = questionArray[i];
-    //     var question = newQuestion.q;
-    //     var answer = newQuestion.answer;
-    //     var newQuestionDiv = $("<div>");
-
-    // // Answer options
-    //     var optionOne = newQuestion.optionOne;
-    //     var optionTwo = newQuestion.optionTwo;
-    //     var optionThree = newQuestion.optionThree;
-    //     var optionFour = newQuestion.optionFour;
-
-    // // Displaying Question to the page
-    //     newQuestionDiv.append(question);
-
-    // // Make answers clickable
-    //     answerButton1 = $("<button>").addClass("btn btn-primary btn-lg answer-button").attr('data-question', i).attr("data-option", optionOne).text(optionOne);
-    //     answerButton2 = $("<button>").addClass("btn btn-primary btn-lg answer-button").attr('data-question', i).attr("data-option", optionTwo).text(optionTwo);
-    //     answerButton3 = $("<button>").addClass("btn btn-primary btn-lg answer-button").attr('data-question', i).attr("data-option", optionThree).text(optionThree);
-    //     answerButton4 = $("<button>").addClass("btn btn-primary btn-lg answer-button").attr('data-question', i).attr("data-option", optionFour).text(optionFour);
- 
-    // // Displaying answer options to page
-    //     var answerDisplay = $("#answers");
-    //     newQuestionDiv.append(answerButton1, answerButton2, answerButton3, answerButton4);
-    //     answerDisplay.append(newQuestionDiv);
-    //  };
-
-    // // Check if answer is correct
-    //     // Set up counters for correct and incorrect
-    //     var correct = 0;
-    //     var incorrect = 0;
-
-    //     // Once an answer button is clicked...
-    //     $(".answer-button").on("click", function() {
-    //         // Make sure all buttons are first marked as unclicked
-    //         $(this).parent().children().removeClass('btn-secondary').addClass('btn-primary');
-
-    //         // If a button is  clicked, change the color so that the user knows which button they clicked
-    //         $(this).removeClass('btn-primary').addClass('btn-secondary');
-
-    //         // Which ever button the user clicks will be added to an array
-    //         // This code ensures that if the user changes their answer that their answer won't count as 2 guesses, but as whatever their most recent guess was.
-    //         choiceBank[$(this).attr('data-question')] =  $(this).attr("data-option");
-    //     });
         
+            // Finish button
+            $('#finish').append(submit);
+            
+    
+        // // Set up counters for correct and incorrect
+        //     var correct = 0;
+        //     var incorrect = 0;
+            
+        // // Set up submit button
+        // var submit = $("<button>").addClass("submit-button btn btn-primary btn-lg").text('Finish');
+    
+        // submit.on("click", function() {
 
-
-    // // Set up submit button
-    // var submit = $("<button>").addClass("submit-button").text('Finish');
-
-    // submit.on("click", function() {
-    //     // Score to be shown
-    //     for(var i = 0; i < questionArray.length; i++){
-    //         if(questionArray[i].answer === choiceBank[i.toString()]) {
-    //             correct++;
-    //         } else {
-    //             incorrect++;
-    //         };
-    //     };
-    //     $("#answers").text("Trivia game completed! \nCorrect: " + correct + "\nIncorrect: " + incorrect);
-    // });
-
-    // $('#answers').append(submit);
-
+        //     // Score to be shown and Check if answer is correct
+        //     for(var i = 0; i < questionArray.length; i++){
+        //         if(questionArray[i].answer === choiceBank[i.toString()]) {
+        //             correct++;
+        //         } else {
+        //             incorrect++;
+        //         };
+        //     };
+        //     $("#answers").text("Trivia game completed! \nCorrect: " + correct + "\nIncorrect: " + incorrect);
+        //     $("#finish").empty();
+        //     $("#timer").empty();
+        //     $("#timer").text("Game Over!")
+        //     console.log("Quiz Submitted. Game Over");
+        // });
+    
+        // $('#finish').append(submit);
+    };
 
 });

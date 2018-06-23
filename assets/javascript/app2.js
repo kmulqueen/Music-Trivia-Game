@@ -2,32 +2,83 @@ $("document").ready(function () {
     // Make an array of objects that contain questions and answers
     var questionArray = [
         {
-            q: "What's the coolest color?",
-            answer: "Blue",
-            optionOne: "Blue",
-            optionTwo: "Red",
-            optionThree: "Purple",
-            optionFour: "Green"
+            q: "Who is NOT a member of the Wu-Tang Clan?",
+            answer: "Redman",
+            optionOne: "RZA",
+            optionTwo: "GZA",
+            optionThree: "Method Man",
+            optionFour: "Redman"
         },
         {
-            q: "What's the coolest instrument?",
-            answer: "Drums",
-            optionOne: "Tuba",
-            optionTwo: "Guitar",
-            optionThree: "Oboe",
-            optionFour: "Drums"
+            q: "What is Thelonious Monk's middle name?",
+            answer: "Sphere",
+            optionOne: "Sphere",
+            optionTwo: "Jupiter",
+            optionThree: "Michael",
+            optionFour: "Orb"
+        },
+        {
+            q: "Who played drums in The Beatles BEFORE Ringo Starr, and is known as 'The Fifth Beatle'?",
+            answer: "Pete Best",
+            optionOne: "Bernard Purdie",
+            optionTwo: "Yoko Ono",
+            optionThree: "Pete Best",
+            optionFour: "Harry Potter"
+        },
+        {
+            q: "What musician won the Nobel Prize for Literature in 2016?",
+            answer: "Bob Dylan",
+            optionOne: "Paul McCartney",
+            optionTwo: "Bob Dylan",
+            optionThree: "Eminem",
+            optionFour: "Lil Pump"
+        },
+        {
+            q: "Which famous American musician was fatally shot by his father on April 1, 1984?",
+            answer: "Marvin Gaye",
+            optionOne: "Lee Morgan",
+            optionTwo: "Kurt Cobain",
+            optionThree: "Marvin Gaye",
+            optionFour: "Jimi Hendrix"
+        },
+        {
+            q: "What was Elvis Presley's middle name?",
+            answer: "Aaron",
+            optionOne: "Aaron",
+            optionTwo: "Marcus",
+            optionThree: "Theodore",
+            optionFour: "Money"
+        },
+        {
+            q: "How many kids does Snoop Dogg have?",
+            answer: "Three",
+            optionOne: "Five",
+            optionTwo: "Two",
+            optionThree: "Three",
+            optionFour: "Four"
+        },
+        {
+            q: "Who let the dogs out?",
+            answer: "The Baha Men",
+            optionOne: "We all did",
+            optionTwo: "The Baha Men",
+            optionThree: "Britney Spears",
+            optionFour: "Slayer"
         }
+        
     ];
 
     var choiceBank=[];
+
 
     // Functions ==========================================================
     startBtn();
     // Start Button
     function startBtn() {
+        $("#timer").empty();
         $("#answers").empty();
         var startButton = $("<button>");
-        startButton.addClass("start-button").text("Start");
+        startButton.addClass("start-button btn btn-primary btn-lg").text("Start");
         $("#answers").append(startButton);
         $(startButton).on("click", function() {
             $("#answers").empty();
@@ -36,19 +87,20 @@ $("document").ready(function () {
 
     };
 
-    // Settimeout
+    // Timer
     function timeUp() {
-    
-     var timerDiv = $("#timer");
+        var timerDiv = $("#timer");
      
-     setInterval(function() {
-        var timer = 60;
-         timer--;
-        timerDiv.text("Time: " + timer);
-     }, 1000);
-     if(timer = 0) {
-         $("#answers").text("Time's Up! \nCorrect: " + correct + "\nIncorrect: " + incorrect);
-     };
+        setInterval(function() {
+            var timer = 60;
+            timer--;
+            console.log(timer);
+            timerDiv.text("Time: " + timer);
+        }, 1000);
+
+        if(timer = 0) {
+             $("#answers").text("Time's Up! \nCorrect: " + correct + "\nIncorrect: " + incorrect);
+        };
 
     };
 
@@ -60,7 +112,8 @@ $("document").ready(function () {
             var newQuestion = questionArray[i];
             var question = newQuestion.q;
             var answer = newQuestion.answer;
-            var newQuestionDiv = $("<div>");
+            var newQuestionDiv = $("<div>").addClass("question-div");
+            var newAnswerDiv = $("<div>").addClass("answer-div");
     
         // Answer options
             var optionOne = newQuestion.optionOne;
@@ -79,14 +132,11 @@ $("document").ready(function () {
      
         // Displaying answer options to page
             var answerDisplay = $("#answers");
-            newQuestionDiv.append(answerButton1, answerButton2, answerButton3, answerButton4);
-            answerDisplay.append(newQuestionDiv);
+            newAnswerDiv.append(answerButton1, answerButton2, answerButton3, answerButton4);
+            answerDisplay.append(newQuestionDiv, newAnswerDiv);
          };
     
-        // Check if answer is correct
-            // Set up counters for correct and incorrect
-            var correct = 0;
-            var incorrect = 0;
+            
     
             // Once an answer button is clicked...
             $(".answer-button").on("click", function() {
@@ -102,13 +152,16 @@ $("document").ready(function () {
             });
             
     
-    
+        // Set up counters for correct and incorrect
+            var correct = 0;
+            var incorrect = 0;
+            
         // Set up submit button
-        var submit = $("<button>").addClass("submit-button").text('Finish');
+        var submit = $("<button>").addClass("submit-button btn btn-primary btn-lg").text('Finish');
     
         submit.on("click", function() {
 
-            // Score to be shown
+            // Score to be shown and Check if answer is correct
             for(var i = 0; i < questionArray.length; i++){
                 if(questionArray[i].answer === choiceBank[i.toString()]) {
                     correct++;
@@ -117,9 +170,11 @@ $("document").ready(function () {
                 };
             };
             $("#answers").text("Trivia game completed! \nCorrect: " + correct + "\nIncorrect: " + incorrect);
+            $("#finish").empty();
+            $("#timer").empty();
         });
     
-        $('#answers').append(submit);
+        $('#finish').append(submit);
     };
 
 
